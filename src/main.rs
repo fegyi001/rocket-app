@@ -2,9 +2,29 @@
 extern crate rocket;
 
 use rocket::{
+    fairing::{Fairing, Info, Kind},
+    http::Header,
     response::status,
     serde::json::{json, Value},
+    Request, Response,
 };
+
+pub struct RemoveServerHeader;
+
+#[rocket::async_trait]
+impl Fairing for RemoveServerHeader {
+    fn info(&self) -> Info {
+        Info {
+            name: "Remove Server Header",
+            kind: Kind::Response,
+        }
+    }
+
+    async fn on_response<'r>(&self, _req: &'r Request<'_>, res: &mut Response<'r>) {
+        // Remove the 'Server' header
+        res.remove_header("Server");
+    }
+}
 
 #[get("/")]
 fn hello() -> Value {
@@ -52,14 +72,15 @@ fn update_rustacean(id: i32) -> Value {
     })
 }
 
-#[delete("/rustaceans/<id>")]
-fn delete_rustacean(id: i32) -> status::NoContent {
+#[delete("/rustaceans/<_id>")]
+fn delete_rustacean(_id: i32) -> status::NoContent {
     status::NoContent
 }
 
 #[rocket::main]
 async fn main() {
     let _ = rocket::build()
+        .attach(RemoveServerHeader)
         .mount(
             "/",
             routes![
