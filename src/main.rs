@@ -3,7 +3,6 @@ extern crate rocket;
 
 use rocket::{
     fairing::{Fairing, Info, Kind},
-    http::Header,
     response::status,
     serde::json::{json, Value},
     Request, Response,
