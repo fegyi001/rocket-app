@@ -25,6 +25,11 @@ impl Fairing for RemoveServerHeader {
     }
 }
 
+#[catch(404)]
+fn not_found() -> Value {
+    json!({ "message": "Not Found" })
+}
+
 #[get("/")]
 fn hello() -> Value {
     json!({ "message": "Hello, world!" })
@@ -91,6 +96,7 @@ async fn main() {
                 delete_rustacean
             ],
         )
+        .register("/", catchers![not_found])
         .launch()
         .await;
 }
