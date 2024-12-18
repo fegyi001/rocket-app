@@ -1,0 +1,2 @@
+PUT {{URL}}/rustaceans/12
+Content-Type: application/json

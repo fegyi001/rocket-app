@@ -1,0 +1,2 @@
+DELETE {{URL}}/rustaceans/12
+Content-Type: application/json

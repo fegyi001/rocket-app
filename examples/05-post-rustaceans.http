@@ -1,0 +1,3 @@
+POST {{URL}}/rustaceans
+Content-Type: application/json
+
